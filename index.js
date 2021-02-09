@@ -181,6 +181,7 @@ class KnexProvider extends SettingProvider {
 
     async remove(guild, key) {
         guild = this.constructor.getGuildID(guild);
+        const val = await get(guild, key);
         /*const settings = this.settings.get(guild);
         if (!settings || typeof settings[key] === 'undefined') return undefined;
 
