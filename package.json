@@ -1,6 +1,6 @@
 {
   "name": "knexprovider",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A discord.js-commando provider for knex",
   "main": "index.js",
   "repository": {
