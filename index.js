@@ -154,8 +154,8 @@ class KnexProvider extends SettingProvider {
 
 
     async get(guild, key, defVal = null) {
-        guild = this.constructor.getGuildID(guild);
-        //const settings = this.settings.get(this.constructor.getGuildID(guild));
+        guild = this.getGuildID(guild);
+        //const settings = this.settings.get(this.getGuildID(guild));
         const result = await this.knex(this.options.tableName).where({
             guild: guild
         });
@@ -165,7 +165,7 @@ class KnexProvider extends SettingProvider {
     }
 
     async set(guild, key, val) {
-        guild = this.constructor.getGuildID(guild);
+        guild = this.getGuildID(guild);
         /*let settings = this.settings.get(guild);
         if (!settings) {
             settings = {};
@@ -180,7 +180,7 @@ class KnexProvider extends SettingProvider {
     }
 
     async remove(guild, key) {
-        guild = this.constructor.getGuildID(guild);
+        guild = this.getGuildID(guild);
         const val = await this.get(guild, key);
         /*const settings = this.settings.get(guild);
         if (!settings || typeof settings[key] === 'undefined') return undefined;
@@ -195,7 +195,7 @@ class KnexProvider extends SettingProvider {
     }
 
     async clear(guild) {
-        guild = this.constructor.getGuildID(guild);
+        guild = this.getGuildID(guild);
         /* if (!this.settings.has(guild)) return;
         this.settings.delete(guild); */
 
@@ -312,8 +312,20 @@ class KnexProvider extends SettingProvider {
 
     }
 
+    /**
+     * Obtains the ID of the provided guild, member or user, or throws an error if it isn't valid
+     * @param {Guild|User|Member|string} guild - Guild to get the ID of
+     * @return {string} ID of the guild, or 'global'
+     */
+    getGuildID(guild) {
+        if (guild instanceof Guild || guild instanceof Member || guild instanceof User) return guild.id;
+        if (guild === 'global' || guild === null) return 'global';
+        if (typeof guild === 'string' && !isNaN(guild)) return guild;
+        throw new TypeError('Invalid guild/member specified. Must be a Guild, Member, User instance, ID, "global", or null.');
+    }
+
     formatRow(result) {
-        if(typeof result != Object) return {};
+        if (typeof result != Object) return {};
         delete result.guild;
         delete result.created_at;
         delete result.updated_at;
