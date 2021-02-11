@@ -1,4 +1,5 @@
 const SettingProvider = require('discord.js-commando').SettingProvider;
+const { Guild, GuildMember, User } = require('discord.js');
 /**
  * Uses knex to store settings with guilds
  * @extends {SettingProvider}
@@ -318,7 +319,7 @@ class KnexProvider extends SettingProvider {
      * @return {string} ID of the guild, or 'global'
      */
     getGuildID(guild) {
-        if (guild instanceof Guild || guild instanceof Member || guild instanceof User) return guild.id;
+        if (guild instanceof Guild || guild instanceof GuildMember || guild instanceof User) return guild.id;
         if (guild === 'global' || guild === null) return 'global';
         if (typeof guild === 'string' && !isNaN(guild)) return guild;
         throw new TypeError('Invalid guild/member specified. Must be a Guild, Member, User instance, ID, "global", or null.');
