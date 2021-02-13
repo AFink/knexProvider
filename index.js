@@ -326,7 +326,7 @@ class KnexProvider extends SettingProvider {
     }
 
     formatRow(result) {
-        if (typeof result != Object) return {};
+        if (!result || result == null) return {};
         delete result.guild;
         delete result.created_at;
         delete result.updated_at;
